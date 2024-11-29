@@ -8,7 +8,7 @@ public class RestLucaSteamApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RestLucaSteamApplication.class, args);
-		System.out.println("Dev");
+		System.out.println("Dev 2");
 	}
 
 }
