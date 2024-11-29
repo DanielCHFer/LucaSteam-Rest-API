@@ -5,15 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ejemplos.spring.model.Juego;
+import com.ejemplos.spring.repository.JuegosDAO;
 
 public class JuegosServiceImpl implements JuegosService{
 
 	@Autowired
-	private JuegoRepository repo;
+	private JuegosDAO juegosDao;
 	
 	@Override
 	public List<Juego> findAll() {
-		return repo.findAll();
+		return juegosDao.findAll();
 	}
 
 }
