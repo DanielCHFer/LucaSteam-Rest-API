@@ -89,4 +89,17 @@ public class JuegosController {
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
 
+	@DeleteMapping("/juegos/{id}")
+	public Optional<Juego> deleteJuego(@PathVariable int id) {
+	    Optional<Juego> juego = serv.findById(id);
+
+	    if (juego.isPresent()) {
+	        serv.delete(juego.get());
+	        return Optional.of(juego.get()); // Devuelve el juego eliminado
+	    } else {
+	        throw new JuegoNotFoundException(id);
+	    }
+	    
+	}
+	
 }
