@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ejemplos.spring.controller.error.JuegoNotFoundException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
 
@@ -54,16 +56,23 @@ public class JuegosController {
         return serv.readJuegos();
     }
 
-	//
+	
 	/**
 	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
 	 * @return Optional<Juego>
 	 */
-	@PostMapping("/juegos")
+	@PostMapping
 	public Optional<Juego> saveJuego(@RequestBody Juego j){
 
 		serv.saveJuego(j);
 		return Optional.ofNullable(j);
 	}
 	
+	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
+	@PutMapping
+	public Juego updateJuego(@RequestBody Juego juego)
+	{
+		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
+	}
+
 }

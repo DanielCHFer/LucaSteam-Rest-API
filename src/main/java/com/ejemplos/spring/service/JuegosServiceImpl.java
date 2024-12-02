@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ejemplos.spring.model.Editor;
 import com.ejemplos.spring.model.Juego;
+import com.ejemplos.spring.repository.EditoresDAO;
 import com.ejemplos.spring.repository.JuegosDAO;
 
 @Service
@@ -21,6 +23,9 @@ public class JuegosServiceImpl implements JuegosService{
 
 	@Autowired
 	private JuegosDAO juegosDao;
+	
+	@Autowired
+	private EditoresDAO editoresDao;
 	
 	@Override
 	public List<Juego> findAll() {
@@ -51,11 +56,12 @@ public class JuegosServiceImpl implements JuegosService{
 				if(datosCSV[3].equals("N/A"))
 					datosCSV[3]="0";
 
-				Juego j = new Juego(Integer.parseInt(datosCSV[0]),datosCSV[1],datosCSV[2],Integer.parseInt(datosCSV[3]),
+				Juego j = new Juego(datosCSV[1],datosCSV[2],Integer.parseInt(datosCSV[3]),
 						datosCSV[4],new Editor(datosCSV[5]),Double.parseDouble(datosCSV[6]),Double.parseDouble(datosCSV[7]),Double.parseDouble(datosCSV[8]),
 						Double.parseDouble(datosCSV[9]),Double.parseDouble(datosCSV[10]));	
 				
 				juegosCSV.add(j);
+				System.out.println(j);
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -75,11 +81,20 @@ public class JuegosServiceImpl implements JuegosService{
 
 	}
 
-
 	@Override
 	public Juego saveJuego(Juego juego) {
-		// TODO Auto-generated method stub
-		return null;
+		Editor editor = juego.getEditor();
+		
+		if (editor != null) {
+			Optional<Editor> existingEditor = editoresDao.findByNombre(juego.getEditor().getNombre());
+			
+			if (!existingEditor.isPresent()) {
+                editoresDao.save(editor); // Persistir el nuevo editor
+            } else {
+                juego.setEditor(existingEditor.get()); // Usar el editor existente
+            }
+		}
+		return juegosDao.save(juego);
 	}
 
 
@@ -92,6 +107,18 @@ public class JuegosServiceImpl implements JuegosService{
 	@Override
 	public Optional<Juego> findByNombre(String nombre) {
 		return juegosDao.findByNombre(nombre);
+	}
+	
+	@Override
+	public Optional<Juego> updateJuego(Juego juego)
+	{
+		Optional<Juego> juegoActual = juegosDao.findById(juego.getIdjuego());
+		
+		if(juegoActual.isPresent())
+			juegosDao.save(juego);
+		
+		
+		return juegoActual;
 	}
 
 }

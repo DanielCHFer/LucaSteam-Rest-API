@@ -37,10 +37,9 @@ public class Juego {
 
 
 
-	public Juego(int idjuego, String nombre, String plataforma, int anyo, String genero, Editor editor, double ventasna,
+	public Juego(String nombre, String plataforma, int anyo, String genero, Editor editor, double ventasna,
 			double ventaseu, double ventasjp, double ventasotras, double ventasglobales) {
 		super();
-		this.idjuego = idjuego;
 		this.nombre = nombre;
 		this.plataforma = plataforma;
 		this.anyo = anyo;
