@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,7 +20,11 @@ public class Juego {
 	private String plataforma;
 	private int anyo;
 	private String genero;
-	private int ideditor;
+	
+	@ManyToOne()
+	@JoinColumn(name="ideditor", referencedColumnName="ideditor")
+	private Editor editor;
+	
 	private double ventasna;
 	private double ventaseu;
 	private double ventasjp;
@@ -69,12 +75,12 @@ public class Juego {
 		this.genero = genero;
 	}
 
-	public int getIdeditor() {
-		return ideditor;
+	public Editor getEditor() {
+		return editor;
 	}
 
-	public void setIdeditor(int ideditor) {
-		this.ideditor = ideditor;
+	public void setEditor(Editor editor) {
+		this.editor = editor;
 	}
 
 	public double getVentasna() {
@@ -120,8 +126,9 @@ public class Juego {
 	@Override
 	public String toString() {
 		return "Juego [idjuego=" + idjuego + ", nombre=" + nombre + ", plataforma=" + plataforma + ", anyo=" + anyo
-				+ ", genero=" + genero + ", ideditor=" + ideditor + ", ventasna=" + ventasna + ", ventaseu=" + ventaseu
+				+ ", genero=" + genero + ", editor=" + editor + ", ventasna=" + ventasna + ", ventaseu=" + ventaseu
 				+ ", ventasjp=" + ventasjp + ", ventasotras=" + ventasotras + ", ventasglobales=" + ventasglobales
 				+ "]";
 	}
+
 }
