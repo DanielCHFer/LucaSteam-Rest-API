@@ -21,5 +21,5 @@ public interface JuegosService {
 
 	public Optional<Juego> updateJuego(Juego juego);
 
-	
+	public List<Juego> findByAnyo(int anyo);
 }

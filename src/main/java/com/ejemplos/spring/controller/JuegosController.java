@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +56,20 @@ public class JuegosController {
     public List<Juego> readJuegos() {
         return serv.readJuegos();
     }
-
+	
+	/**
+	 * Cargar juegos desde un archivo CSV.
+	 *
+	 * @return Una lista de juegos con los datos del csv para agregarlos a la base de datos.
+	 */
+	@Operation(
+		summary = "Listar juegos segun anyo de salida",
+		description = "Devuelve un listado de los juegos almacenados filtrando por el anyo de salida especificado."
+	)
+	@GetMapping("/anyo/{anyo}")
+    public List<Juego> listJuegosByAnyo(@PathVariable int anyo) {
+        return serv.findByAnyo(anyo);
+    }
 	
 	/**
 	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.

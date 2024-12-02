@@ -121,4 +121,9 @@ public class JuegosServiceImpl implements JuegosService{
 		return juegoActual;
 	}
 
+	@Override
+	public List<Juego> findByAnyo(int anyo) {
+		return juegosDao.findByAnyo(anyo);
+	}
+
 }
