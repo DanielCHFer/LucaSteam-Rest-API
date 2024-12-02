@@ -94,7 +94,7 @@ public class JuegosController {
 	    Optional<Juego> juego = serv.findById(id);
 
 	    if (juego.isPresent()) {
-	        serv.delete(juego.get());
+	        serv.deleteJuego(juego.get());
 	        return Optional.of(juego.get()); // Devuelve el juego eliminado
 	    } else {
 	        throw new JuegoNotFoundException(id);
