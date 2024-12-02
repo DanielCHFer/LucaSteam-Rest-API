@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ejemplos.spring.controller.error.JuegoNotFoundException;
+import com.ejemplos.spring.controller.error.ValidationException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/juegos")
@@ -60,15 +65,39 @@ public class JuegosController {
 	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
 	 * @return Optional<Juego>
 	 */
-	@PostMapping("/juegos")
-	public Optional<Juego> saveJuego(@RequestBody Juego j){
-
-		serv.saveJuego(j);
-		return Optional.ofNullable(j);
+	
+	@PostMapping
+	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+	        StringBuilder errors = new StringBuilder();
+	        bindingResult.getFieldErrors().forEach(error -> 
+	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
+	        );
+	        throw new ValidationException(errors.toString());
+	    }
+		return serv.saveJuego(juego);
 	}
 	
+	/*@PostMapping
+	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult) {
+
+	    if (bindingResult.hasErrors()) {
+	        // Construir un mensaje de error a partir de los errores de validación
+	        StringBuilder errors = new StringBuilder();
+	        bindingResult.getFieldErrors().forEach(error -> 
+	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
+	        );
+
+	        // Lanza una excepción con el estado 400 y el mensaje de error
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errors.toString());
+	    }
+
+	    // Si no hay errores, guarda el juego
+	    return serv.saveJuego(juego);
+	}*/
+	
 	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
-	@PutMapping("/juegos")
+	@PutMapping("/update")
 	public Juego updateJugo(@RequestBody Juego juego)
 	{
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
