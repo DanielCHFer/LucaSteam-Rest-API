@@ -48,7 +48,7 @@ public class JuegosServiceImpl implements JuegosService{
 				 datosCSV = linea.split(",");
 				if(datosCSV[3].equals("N/A"))
 					datosCSV[3]="0";
-
+				meter el objeto editor
 				Juego j = new Juego(Integer.parseInt(datosCSV[0]),datosCSV[1],datosCSV[2],Integer.parseInt(datosCSV[3]),
 						datosCSV[4],Double.parseDouble(datosCSV[6]),Double.parseDouble(datosCSV[7]),Double.parseDouble(datosCSV[8]),
 						Double.parseDouble(datosCSV[9]),Double.parseDouble(datosCSV[10]));	
