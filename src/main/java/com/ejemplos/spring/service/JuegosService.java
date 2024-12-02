@@ -9,4 +9,5 @@ public interface JuegosService {
 	//Devuelve todos los juegos 
 	public List<Juego> findAll();
 	
+	public List<Juego> readJuegos();
 }
