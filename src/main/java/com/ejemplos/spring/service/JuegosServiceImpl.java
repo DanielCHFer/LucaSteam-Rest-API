@@ -121,4 +121,10 @@ public class JuegosServiceImpl implements JuegosService{
 		return juegoActual;
 	}
 
+
+	@Override
+	public Optional<Juego> findById(int id) {
+		return juegosDao.findById(id);
+	}
+
 }

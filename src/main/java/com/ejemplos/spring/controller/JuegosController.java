@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,4 +76,17 @@ public class JuegosController {
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
 
+	@DeleteMapping("/juegos/{id}")
+	public Optional<Juego> deleteJuego(@PathVariable int id) {
+	    Optional<Juego> juego = serv.findById(id);
+
+	    if (juego.isPresent()) {
+	        serv.delete(juego.get());
+	        return Optional.of(juego.get()); // Devuelve el juego eliminado
+	    } else {
+	        throw new JuegoNotFoundException(id);
+	    }
+	    
+	}
+	
 }

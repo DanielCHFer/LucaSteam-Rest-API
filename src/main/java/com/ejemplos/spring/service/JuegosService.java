@@ -21,5 +21,7 @@ public interface JuegosService {
 
 	public Optional<Juego> updateJuego(Juego juego);
 
+	public Optional<Juego> findById(int id);
+
 	
 }
