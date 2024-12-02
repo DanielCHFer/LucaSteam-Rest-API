@@ -19,7 +19,14 @@ public class Editor {
 		super();
 	}
 	
+	public Editor(int ideditor, String nombre) {
+		super();
+		this.ideditor = ideditor;
+		this.nombre = nombre;
+	}
+	
 	public Editor(String nombre) {
+		super();
 		this.nombre = nombre;
 	}
 

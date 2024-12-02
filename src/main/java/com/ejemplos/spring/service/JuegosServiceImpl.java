@@ -6,13 +6,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ejemplos.spring.model.Editor;
 import com.ejemplos.spring.model.Juego;
+import com.ejemplos.spring.repository.EditoresDAO;
 import com.ejemplos.spring.repository.JuegosDAO;
 
 @Service
@@ -20,6 +23,9 @@ public class JuegosServiceImpl implements JuegosService{
 
 	@Autowired
 	private JuegosDAO juegosDao;
+	
+	@Autowired
+	private EditoresDAO editoresDao;
 	
 	@Override
 	public List<Juego> findAll() {
@@ -55,6 +61,7 @@ public class JuegosServiceImpl implements JuegosService{
 						Double.parseDouble(datosCSV[9]),Double.parseDouble(datosCSV[10]));	
 				
 				juegosCSV.add(j);
+				System.out.println(j);
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -67,18 +74,30 @@ public class JuegosServiceImpl implements JuegosService{
 			System.out.println(datosCSV[1]);
 		}
 		
-		for(Juego j: juegosCSV)
-			saveJuego(j);
+		Iterator<Juego> iterator = juegosCSV.iterator();
+	    while (iterator.hasNext()) {
+	        Juego j = iterator.next();
+	        saveJuego(j);
+	    }
 		
 		return juegosCSV;
 
 	}
 
-
 	@Override
 	public Juego saveJuego(Juego juego) {
-		// TODO Auto-generated method stub
-		return null;
+		Editor editor = juego.getEditor();
+		
+		if (editor != null) {
+			Optional<Editor> existingEditor = editoresDao.findByNombre(juego.getEditor().getNombre());
+			
+			if (!existingEditor.isPresent()) {
+                editoresDao.save(editor); // Persistir el nuevo editor
+            } else {
+                juego.setEditor(existingEditor.get()); // Usar el editor existente
+            }
+		}
+		return juegosDao.save(juego);
 	}
 
 

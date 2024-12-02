@@ -58,7 +58,7 @@ public class JuegosController {
 	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
 	 * @return Optional<Juego>
 	 */
-	@PostMapping("/juegos")
+	@PostMapping
 	public Optional<Juego> saveJuego(@RequestBody Juego j){
 
 		serv.saveJuego(j);
