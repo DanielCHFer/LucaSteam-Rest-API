@@ -9,7 +9,7 @@ public class JuegoNotFoundException extends RuntimeException{
 	}
 	
 	
-	public JuegoNotFoundException(Long id) {
+	public JuegoNotFoundException(int id) {
 		super("Epic Fail: No existe el Juego con el id"+ id);
 	}
 	
