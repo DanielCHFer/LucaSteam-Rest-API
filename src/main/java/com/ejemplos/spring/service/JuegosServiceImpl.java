@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,11 @@ public class JuegosServiceImpl implements JuegosService{
 	public Editor saveEditor(Editor editor) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Optional<Juego> findByNombre(String nombre) {
+		return juegosDao.findByNombre(nombre);
 	}
 
 }
