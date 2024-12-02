@@ -18,6 +18,10 @@ public class Editor {
 	public Editor() {
 		super();
 	}
+	
+	public Editor(String nombre) {
+		this.nombre = nombre;
+	}
 
 	public int getIdeditor() {
 		return ideditor;

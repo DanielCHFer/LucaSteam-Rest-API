@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ejemplos.spring.model.Editor;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.repository.JuegosDAO;
 
@@ -24,7 +25,6 @@ public class JuegosServiceImpl implements JuegosService{
 	public List<Juego> findAll() {
 		return juegosDao.findAll();
 	}
-
 	
 	//
 	/**
@@ -70,6 +70,18 @@ public class JuegosServiceImpl implements JuegosService{
 			saveJuego(j);
 		
 		return juegosCSV;
+
+	}
+
+	@Override
+	public Juego saveJuego(Juego juego) {
+		return juegosDao.save(juego);
+	}
+
+	@Override
+	public Editor saveEditor(Editor editor) {
+		// TODO Auto-generated method stub
+		return null;
 
 	}
 
