@@ -56,7 +56,7 @@ public class JuegosServiceImpl implements JuegosService{
 				if(datosCSV[3].equals("N/A"))
 					datosCSV[3]="0";
 
-				Juego j = new Juego(Integer.parseInt(datosCSV[0]),datosCSV[1],datosCSV[2],Integer.parseInt(datosCSV[3]),
+				Juego j = new Juego(datosCSV[1],datosCSV[2],Integer.parseInt(datosCSV[3]),
 						datosCSV[4],new Editor(datosCSV[5]),Double.parseDouble(datosCSV[6]),Double.parseDouble(datosCSV[7]),Double.parseDouble(datosCSV[8]),
 						Double.parseDouble(datosCSV[9]),Double.parseDouble(datosCSV[10]));	
 				
@@ -74,11 +74,8 @@ public class JuegosServiceImpl implements JuegosService{
 			System.out.println(datosCSV[1]);
 		}
 		
-		Iterator<Juego> iterator = juegosCSV.iterator();
-	    while (iterator.hasNext()) {
-	        Juego j = iterator.next();
-	        saveJuego(j);
-	    }
+		for(Juego j: juegosCSV)
+			saveJuego(j);
 		
 		return juegosCSV;
 

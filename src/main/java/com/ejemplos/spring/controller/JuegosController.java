@@ -68,8 +68,8 @@ public class JuegosController {
 	}
 	
 	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
-	@PutMapping("/juegos")
-	public Juego updateJugo(@RequestBody Juego juego)
+	@PutMapping
+	public Juego updateJuego(@RequestBody Juego juego)
 	{
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
