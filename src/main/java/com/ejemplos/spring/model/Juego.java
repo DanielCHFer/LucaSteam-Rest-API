@@ -28,6 +28,25 @@ public class Juego {
 	public Juego() {
 		super();
 	}
+	
+	
+
+	public Juego(int idjuego, String nombre, String plataforma, int anyo, String genero, double ventasna,
+			double ventaseu, double ventasjp, double ventasotras, double ventasglobales) {
+		super();
+		this.idjuego = idjuego;
+		this.nombre = nombre;
+		this.plataforma = plataforma;
+		this.anyo = anyo;
+		this.genero = genero;
+		this.ventasna = ventasna;
+		this.ventaseu = ventaseu;
+		this.ventasjp = ventasjp;
+		this.ventasotras = ventasotras;
+		this.ventasglobales = ventasglobales;
+	}
+
+
 
 	public int getIdjuego() {
 		return idjuego;
