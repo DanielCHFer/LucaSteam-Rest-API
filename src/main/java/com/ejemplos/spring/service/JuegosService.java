@@ -1,6 +1,7 @@
 package com.ejemplos.spring.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ejemplos.spring.model.Editor;
 import com.ejemplos.spring.model.Juego;
@@ -15,5 +16,7 @@ public interface JuegosService {
 	public Juego saveJuego(Juego juego);
 	
 	public Editor saveEditor(Editor editor);
+	
+	public Optional<Juego> updateJuego(Juego juego);
 	
 }
