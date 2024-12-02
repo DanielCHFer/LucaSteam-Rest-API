@@ -114,10 +114,9 @@ public class JuegosServiceImpl implements JuegosService{
 	{
 		Optional<Juego> juegoActual = juegosDao.findById(juego.getIdjuego());
 		
-		if(juegoActual != null)
-		{
+		if(juegoActual.isPresent())
 			juegosDao.save(juego);
-		}
+		
 		
 		return juegoActual;
 	}
