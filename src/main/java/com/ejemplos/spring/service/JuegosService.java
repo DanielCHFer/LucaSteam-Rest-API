@@ -18,5 +18,8 @@ public interface JuegosService {
 	public Editor saveEditor(Editor editor);
 	
 	public Optional<Juego> findByNombre(String nombre);
+
+	public Optional<Juego> updateJuego(Juego juego);
+
 	
 }

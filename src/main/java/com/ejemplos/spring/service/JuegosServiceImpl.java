@@ -93,5 +93,18 @@ public class JuegosServiceImpl implements JuegosService{
 	public Optional<Juego> findByNombre(String nombre) {
 		return juegosDao.findByNombre(nombre);
 	}
+	
+	@Override
+	public Optional<Juego> updateJuego(Juego juego)
+	{
+		Optional<Juego> juegoActual = juegosDao.findById(juego.getIdjuego());
+		
+		if(juegoActual != null)
+		{
+			juegosDao.save(juego);
+		}
+		
+		return juegoActual;
+	}
 
 }
