@@ -21,5 +21,6 @@ public interface JuegosService {
 
 	public Optional<Juego> updateJuego(Juego juego);
 
+	public Juego deleteJuego(Juego j);
 	
 }

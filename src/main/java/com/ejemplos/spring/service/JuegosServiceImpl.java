@@ -117,8 +117,18 @@ public class JuegosServiceImpl implements JuegosService{
 		if(juegoActual.isPresent())
 			juegosDao.save(juego);
 		
-		
 		return juegoActual;
 	}
 
+
+	@Override
+	public Juego deleteJuego(Juego j) {
+
+		juegosDao.delete(j);
+
+		return j;
+	}
+
+	
+	
 }

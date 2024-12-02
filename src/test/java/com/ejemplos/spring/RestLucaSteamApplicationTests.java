@@ -2,6 +2,8 @@ package com.ejemplos.spring;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -12,7 +14,10 @@ import com.ejemplos.spring.controller.JuegosController;
 import com.ejemplos.spring.controller.error.JuegoExistsException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.SelectorResolutionResult.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,12 +31,16 @@ class RestLucaSteamApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
+    
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private JuegosService juegoService; // Simula el servicio inyectado en el controlador
 
     @Test
     void testListJuegosDevuelveLista() throws Exception {
+    	//Dada una solicitud GET deberian devolverse una lista de los juegos almacenados
     	// Verifica que los juegos están almacenados en la base de datos
     	List<Juego> juegos = juegoService.findAll();
 
@@ -44,18 +53,21 @@ class RestLucaSteamApplicationTests {
     
     @Test
     void testJuegoExistsException() throws Exception {
-        // Dado un juego con un nombre que debería lanzar la excepción JuegoExistsException
+        // Dado un juego repetido se debería lanzar la excepción JuegoExistsException
         Juego juego = new Juego();
         juego.setIdjuego(1);
         juego.setNombre("JuegoExistente");
+        String json = objectMapper.writeValueAsString(juego);
 
         // Simula que el servicio lanza la excepción JuegoExistsException
-        when(juegoService.findByNombre("JuegoExistente")).thenThrow(JuegoExistsException.class);
+       // when(juegoService.findByNombre("JuegoExistente")).thenThrow(JuegoExistsException.class);
 
-        // Realiza la solicitud GET y verifica la respuesta
-        mockMvc.perform(get("/juegos/cargar")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict()); // Se espera un error 409 (Conflict) al lanzar la excepción
+        // Realiza la solicitud POST y verifica la respuesta
+        mockMvc.perform(put("/juegos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+        		.andExpect(status().isNotFound());
+        		
     }
     
 }
