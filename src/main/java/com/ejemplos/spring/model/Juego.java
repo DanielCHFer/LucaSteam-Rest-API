@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="juegos")
@@ -16,9 +20,16 @@ public class Juego {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idjuego;
+	
+	//tiene que ser mayor que 3 y menor que 30
+	@NotEmpty(message = "El nombre no debe ser vacío")
+	@NotNull
 	private String nombre;
+	@NotEmpty(message = "la plataforma no puede estar vacia")
 	private String plataforma;
+	@Positive(message ="no se puede introducir un anyo negativo")
 	private int anyo;
+	@NotEmpty(message = "El genero no puede estar vacio")
 	private String genero;
 	
 	@ManyToOne()
