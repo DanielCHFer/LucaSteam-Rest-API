@@ -34,10 +34,10 @@ public class Juego {
 	public Juego() {
 		super();
 	}
-	
-	
 
-	public Juego(int idjuego, String nombre, String plataforma, int anyo, String genero, double ventasna,
+
+
+	public Juego(int idjuego, String nombre, String plataforma, int anyo, String genero, Editor editor, double ventasna,
 			double ventaseu, double ventasjp, double ventasotras, double ventasglobales) {
 		super();
 		this.idjuego = idjuego;
@@ -45,13 +45,13 @@ public class Juego {
 		this.plataforma = plataforma;
 		this.anyo = anyo;
 		this.genero = genero;
+		this.editor = editor;
 		this.ventasna = ventasna;
 		this.ventaseu = ventaseu;
 		this.ventasjp = ventasjp;
 		this.ventasotras = ventasotras;
 		this.ventasglobales = ventasglobales;
 	}
-
 
 
 	public int getIdjuego() {
