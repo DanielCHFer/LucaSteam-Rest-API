@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	 @ExceptionHandler(ValidationException.class)
-	    public ResponseEntity<String> handleValidationException(ValidationException ex) {
+	 @ExceptionHandler(JuegoFormatException.class)
+	    public ResponseEntity<String> handleValidationException(JuegoFormatException ex) {
 	        return ResponseEntity.badRequest().body(ex.getMessage());
 	    }
 	

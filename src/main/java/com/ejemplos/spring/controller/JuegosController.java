@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ejemplos.spring.controller.error.JuegoNotFoundException;
-import com.ejemplos.spring.controller.error.ValidationException;
+import com.ejemplos.spring.controller.error.JuegoFormatException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
 
@@ -74,29 +74,10 @@ public class JuegosController {
 	        bindingResult.getFieldErrors().forEach(error -> 
 	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
 	        );
-	        throw new ValidationException(errors.toString());
+	        throw new JuegoFormatException(errors.toString());
 	    }
 		return serv.saveJuego(juego);
 	}
-	
-	
-	/*@PostMapping
-	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult) {
-
-	    if (bindingResult.hasErrors()) {
-	        // Construir un mensaje de error a partir de los errores de validación
-	        StringBuilder errors = new StringBuilder();
-	        bindingResult.getFieldErrors().forEach(error -> 
-	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
-	        );
-
-	        // Lanza una excepción con el estado 400 y el mensaje de error
-	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errors.toString());
-	    }
-
-	    // Si no hay errores, guarda el juego
-	    return serv.saveJuego(juego);
-	}*/
 	
 	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
 	@PutMapping

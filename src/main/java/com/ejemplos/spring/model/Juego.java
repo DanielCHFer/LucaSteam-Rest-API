@@ -23,7 +23,6 @@ public class Juego {
 	
 	//tiene que ser mayor que 3 y menor que 30
 	@NotEmpty(message = "El nombre no debe ser vacío")
-	@NotNull
 	private String nombre;
 	@NotEmpty(message = "la plataforma no puede estar vacia")
 	private String plataforma;
