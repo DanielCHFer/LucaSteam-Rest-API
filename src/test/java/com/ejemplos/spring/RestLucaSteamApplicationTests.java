@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ejemplos.spring.controller.JuegosController;
+import com.ejemplos.spring.controller.error.JuegoExistsException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
 import org.junit.jupiter.api.Test;
@@ -40,4 +41,21 @@ class RestLucaSteamApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
     }
+    
+    @Test
+    void testJuegoExistsException() throws Exception {
+        // Dado un juego con un nombre que debería lanzar la excepción JuegoExistsException
+        Juego juego = new Juego();
+        juego.setIdjuego(1);
+        juego.setNombre("JuegoExistente");
+
+        // Simula que el servicio lanza la excepción JuegoExistsException
+        when(juegoService.findByNombre("JuegoExistente")).thenThrow(JuegoExistsException.class);
+
+        // Realiza la solicitud GET y verifica la respuesta
+        mockMvc.perform(get("/juegos/cargar")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict()); // Se espera un error 409 (Conflict) al lanzar la excepción
+    }
+    
 }
