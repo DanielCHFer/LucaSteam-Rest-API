@@ -9,8 +9,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface EditoresDAO extends JpaRepository<Editor,Integer>{
+public interface EditoresDAO extends JpaRepository<Editor, Integer> {
 
 	Optional<Editor> findByNombre(String nombre);
-	
+
 }

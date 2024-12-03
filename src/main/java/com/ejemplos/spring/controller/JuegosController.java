@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.ejemplos.spring.controller.error.JuegoNotFoundException;
 import com.ejemplos.spring.controller.error.JuegoFormatException;
@@ -33,79 +31,77 @@ import jakarta.validation.Valid;
 @RequestMapping("/juegos")
 @Tag(name = "Juegos Controller", description = "Controlador para gestionar los juegos.")
 public class JuegosController {
-	
+
 	@Autowired
 	private JuegosService serv;
-	
+
 	/**
 	 * Listar todos los juegos
 	 *
 	 * @return La lista de objetos Juego
 	 */
-	@Operation(
-		summary = "Listar Juegos",
-		description = "Devuelve una lista de todos los juegos almacenados en la base de datos."
-	)
+	@Operation(summary = "Listar Juegos", description = "Devuelve una lista de todos los juegos almacenados en la base de datos.")
 	@GetMapping
-	public List<Juego> listJuegos(){
+	public List<Juego> listJuegos() {
 		return serv.findAll();
 	}
-	
+
 	/**
 	 * Cargar juegos desde un archivo CSV.
 	 *
-	 * @return Una lista de juegos con los datos del csv para agregarlos a la base de datos.
+	 * @return Una lista de juegos con los datos del csv para agregarlos a la base
+	 *         de datos.
 	 */
-	@Operation(
-		summary = "Cargar juegos desde CSV",
-		description = "Carga los juegos desde un archivo CSV y devuelve la lista de juegos."
-	)
+	@Operation(summary = "Cargar juegos desde CSV", description = "Carga los juegos desde un archivo CSV y devuelve la lista de juegos.")
 	@GetMapping("/cargar")
-    public List<Juego> readJuegos() {
-        return serv.readJuegos();
-    }
-	
+	public List<Juego> readJuegos() {
+		return serv.readJuegos();
+	}
+
 	/**
 	 * Cargar juegos desde un archivo CSV.
 	 *
-	 * @return Una lista de juegos con los datos del csv para agregarlos a la base de datos.
+	 * @return Una lista de juegos con los datos del csv para agregarlos a la base
+	 *         de datos.
 	 */
-	@Operation(
-		summary = "Listar juegos segun anyo de salida",
-		description = "Devuelve un listado de los juegos almacenados filtrando por el anyo de salida especificado."
-	)
+	@Operation(summary = "Listar juegos segun anyo de salida", description = "Devuelve un listado de los juegos almacenados filtrando por el anyo de salida especificado.")
 	@GetMapping("/anyo/{anyo}")
-    public List<Juego> listJuegosByAnyo(@PathVariable int anyo) {
-        return serv.findByAnyo(anyo);
-    }
-	
+	public List<Juego> listJuegosByAnyo(@PathVariable int anyo) {
+		return serv.findByAnyo(anyo);
+	}
+
 	/**
-	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
+	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la
+	 * capa de Control.
+	 * 
 	 * @return Optional<Juego>
 	 */
+	@Operation(summary = "Guardar datos de un juego", description = "Recibe un objeto juego y lo almacena en base de datos tras validarlo.")
 	@PostMapping
-	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult){
+	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-	        StringBuilder errors = new StringBuilder();
-	        bindingResult.getFieldErrors().forEach(error -> 
-	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
-	        );
-	        throw new JuegoFormatException(errors.toString());
-	    }
+			StringBuilder errors = new StringBuilder();
+			bindingResult.getFieldErrors().forEach(error -> errors.append(error.getField()).append(": ")
+					.append(error.getDefaultMessage()).append("; "));
+			throw new JuegoFormatException(errors.toString());
+		}
 		return serv.saveJuego(juego);
 	}
-	
-	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
+
+	/*
+	 * // se hace un update, se llama al server y nos devuelver unos valores y en
+	 * caso // de que no haya valor devuelto lanza una excepcion.
+	 * 
+	 * @PutMapping public Juego updateJuego(@RequestBody Juego juego) { return
+	 * serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); }
+	 * 
+	 * // hacemos un update y en caso de que no se pueda devolvemos un mensaje //
+	 * personalizado
+	 */
+
+	@Operation(summary = "Actualizar datos de un juego", description = "Recibe un objeto juego con id y reemplaza el juego correspondiente con los nuevos datos.")
 	@PutMapping
-	public Juego updateJuego(@RequestBody Juego juego)
-	{
-		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
-	}
-	
-	//hacemos un update y en caso de que no se pueda devolvemos un mensaje personalizado
-	@PutMapping("/modicar")
-	public ResponseEntity<Juego> updateJuego1(@RequestBody Juego juego)
-	{
+	public ResponseEntity<Juego> updateJuego1(@RequestBody Juego juego) {
 		Optional<Juego> result = this.serv.updateJuego(juego);
 		if (result.isEmpty()) {
 			// No encontrado
@@ -114,16 +110,17 @@ public class JuegosController {
 		return ResponseEntity.of(result);
 	}
 
-	@DeleteMapping("/juegos/{id}")
+	@Operation(summary = "Elimina los datos de un juego", description = "Recibe un id y elimina los datos del juego correspondiente, devolviendo el juego eliminado.")
+	@DeleteMapping("/{id}")
 	public Optional<Juego> deleteJuego(@PathVariable int id) {
-	    Optional<Juego> juego = serv.findById(id);
+		Optional<Juego> juego = serv.findById(id);
 
-	    if (juego.isPresent()) {
-	        serv.deleteJuego(juego.get());
-	        return Optional.of(juego.get()); // Devuelve el juego eliminado
-	    } else {
-	        throw new JuegoNotFoundException(id);
-	    }
-	    
+		if (juego.isPresent()) {
+			serv.deleteJuego(juego.get());
+			return Optional.of(juego.get()); // Devuelve el juego eliminado
+		} else {
+			throw new JuegoNotFoundException(id);
+		}
+
 	}
 }

@@ -7,24 +7,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="editores")
+@Table(name = "editores")
 public class Editor {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ideditor;
 	private String nombre;
-	
+
 	public Editor() {
 		super();
 	}
-	
+
 	public Editor(int ideditor, String nombre) {
 		super();
 		this.ideditor = ideditor;
 		this.nombre = nombre;
 	}
-	
+
 	public Editor(String nombre) {
 		super();
 		this.nombre = nombre;
