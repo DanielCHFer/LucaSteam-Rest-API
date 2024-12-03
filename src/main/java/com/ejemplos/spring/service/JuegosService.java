@@ -26,5 +26,7 @@ public interface JuegosService {
 	public Optional<Juego> findById(int id);
 
 	public Juego deleteJuego(Juego j);
+	
+	public List<Juego> listNintendo();
 
 }
