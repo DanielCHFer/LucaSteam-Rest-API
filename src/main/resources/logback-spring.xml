@@ -1,0 +1,27 @@
+<configuration>
+
+    <!-- Configuración de la consola -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Configuración de archivo -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Definir el nivel de log para las aplicaciones -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Configuración de logs de la aplicación -->
+    <logger name="com.example" level="DEBUG" />
+
+</configuration>

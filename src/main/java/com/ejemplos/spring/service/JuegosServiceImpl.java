@@ -138,6 +138,13 @@ public class JuegosServiceImpl implements JuegosService{
 		return j;
 	}
 
+
+	@Override
+	public List<Juego> listNintendo() {
+
+		return juegosDao.listNintendo();
+	}
+
 	
 	
 }

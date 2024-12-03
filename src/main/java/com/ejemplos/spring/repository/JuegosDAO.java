@@ -18,4 +18,6 @@ public interface JuegosDAO extends JpaRepository<Juego,Integer>{
 
 	List<Juego> findByAnyo(int anyo);
 
+    @Query("SELECT j FROM Juego j JOIN editor e WHERE e.nombre = 'Nintendo'")
+    List<Juego> listNintendo();
 }

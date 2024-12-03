@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ejemplos.spring.controller.error.JuegoNotFoundException;
+import com.ejemplos.spring.RestLucaSteamApplication;
 import com.ejemplos.spring.controller.error.JuegoFormatException;
 import com.ejemplos.spring.model.Juego;
 import com.ejemplos.spring.service.JuegosService;
@@ -33,6 +36,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/juegos")
 @Tag(name = "Juegos Controller", description = "Controlador para gestionar los juegos.")
 public class JuegosController {
+	
+    private static final Logger logger = LoggerFactory.getLogger(JuegosController.class);
 	
 	@Autowired
 	private JuegosService serv;
@@ -48,6 +53,7 @@ public class JuegosController {
 	)
 	@GetMapping
 	public List<Juego> listJuegos(){
+		logger.info("Listando todos los juegos");
 		return serv.findAll();
 	}
 	
@@ -62,6 +68,7 @@ public class JuegosController {
 	)
 	@GetMapping("/cargar")
     public List<Juego> readJuegos() {
+		logger.info("Cargando los juegos desde el CSV");
         return serv.readJuegos();
     }
 	
@@ -76,6 +83,7 @@ public class JuegosController {
 	)
 	@GetMapping("/anyo/{anyo}")
     public List<Juego> listJuegosByAnyo(@PathVariable int anyo) {
+		logger.info("Listando los juegos lanzados en el año " + anyo);
         return serv.findByAnyo(anyo);
     }
 	
@@ -90,8 +98,10 @@ public class JuegosController {
 	        bindingResult.getFieldErrors().forEach(error -> 
 	            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
 	        );
+			logger.warn("Juego con formato no válido");
 	        throw new JuegoFormatException(errors.toString());
 	    }
+		logger.info("Introduciendo "+juego.getNombre()+" en la base de datos:");
 		return serv.saveJuego(juego);
 	}
 	
@@ -99,6 +109,7 @@ public class JuegosController {
 	@PutMapping
 	public Juego updateJuego(@RequestBody Juego juego)
 	{
+		logger.info("Modificando" + juego.getNombre()+ "en la base de datos");
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
 	
@@ -109,6 +120,7 @@ public class JuegosController {
 		Optional<Juego> result = this.serv.updateJuego(juego);
 		if (result.isEmpty()) {
 			// No encontrado
+			logger.warn("El juego con el ID "+ juego.getIdjuego()+" no existe");
 			throw new NoSuchElementException("El juego con el ID proporcionado no existe");
 		}
 		return ResponseEntity.of(result);
@@ -120,10 +132,22 @@ public class JuegosController {
 
 	    if (juego.isPresent()) {
 	        serv.deleteJuego(juego.get());
+	        logger.info(juego.get().getNombre()+" borrado");
 	        return Optional.of(juego.get()); // Devuelve el juego eliminado
 	    } else {
+	    	logger.warn("No existe ningun juego con el id "+id );
 	        throw new JuegoNotFoundException(id);
 	    }
-	    
+	}
+	
+	/**
+	 * Crear Endpoint @GetMapping(“/nintendo”) en la capa de control y el método listNintendo(), devuelve List<Juego>.
+	 * @return la lista de juegos editados por nintendo
+	 */
+	
+	@GetMapping("/nintendo")
+	public List<Juego> listNintendo(){
+		logger.info("Listando juegos editados por Nintendo");
+		return serv.listNintendo();
 	}
 }
