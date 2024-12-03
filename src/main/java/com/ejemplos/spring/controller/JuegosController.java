@@ -126,27 +126,6 @@ public class JuegosController {
 	}
 
 	/**
-     * Actualizar un juego existente.
-     *
-     * @param Juego El juego con los nuevos datos.
-     * @return El juego actualizado.
-     */
-    @Operation(
-        summary = "Actualizar un juego",
-        description = "Actualiza los datos de un juego existente."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Juego actualizado exitosamente"),
-        @ApiResponse(responseCode = "404", description = "El juego no se encontró"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-    })
-	@PutMapping
-	public Juego updateJuego(@RequestBody Juego juego)
-	{
-		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
-	}
-
-	/**
      * Eliminar un juego.
      *
      * @param id El ID del juego que se desea eliminar.
