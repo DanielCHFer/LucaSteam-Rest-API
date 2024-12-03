@@ -1,6 +1,5 @@
 package com.ejemplos.spring.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,46 +8,44 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="juegos")
+@Table(name = "juegos")
 public class Juego {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idjuego;
-	
-	//tiene que ser mayor que 3 y menor que 30
+
+	// tiene que ser mayor que 3 y menor que 30
 	@NotEmpty(message = "El nombre no debe ser vacío")
 	private String nombre;
 	@NotEmpty(message = "la plataforma no puede estar vacia")
 	private String plataforma;
-	@Positive(message ="no se puede introducir un anyo negativo")
+	@Positive(message = "no se puede introducir un anyo negativo")
 	private int anyo;
 	@NotEmpty(message = "El genero no puede estar vacio")
 	private String genero;
-	
+
 	@ManyToOne()
-	@JoinColumn(name="ideditor", referencedColumnName="ideditor")
+	@JoinColumn(name = "ideditor", referencedColumnName = "ideditor")
 	private Editor editor;
-	
+
 	private double ventasna;
 	private double ventaseu;
 	private double ventasjp;
 	private double ventasotras;
 	private double ventasglobales;
-	
+
 	public Juego() {
 		super();
 	}
 
-	public Juego(int id,String nombre, String plataforma, int anyo, String genero, Editor editor, double ventasna,
+	public Juego(int id, String nombre, String plataforma, int anyo, String genero, Editor editor, double ventasna,
 			double ventaseu, double ventasjp, double ventasotras, double ventasglobales) {
 		super();
-		this.idjuego=id;
+		this.idjuego = id;
 		this.nombre = nombre;
 		this.plataforma = plataforma;
 		this.anyo = anyo;
@@ -75,7 +72,6 @@ public class Juego {
 		this.ventasotras = ventasotras;
 		this.ventasglobales = ventasglobales;
 	}
-
 
 	public int getIdjuego() {
 		return idjuego;

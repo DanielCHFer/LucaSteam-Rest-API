@@ -8,15 +8,15 @@ import com.ejemplos.spring.model.Juego;
 
 public interface JuegosService {
 
-	//Devuelve todos los juegos 
+	// Devuelve todos los juegos
 	public List<Juego> findAll();
-	
+
 	public List<Juego> readJuegos();
 
 	public Juego saveJuego(Juego juego);
-	
+
 	public Editor saveEditor(Editor editor);
-	
+
 	public Optional<Juego> findByNombre(String nombre);
 
 	public Optional<Juego> updateJuego(Juego juego);
@@ -28,5 +28,7 @@ public interface JuegosService {
 	public Juego deleteJuego(Juego j);
 	
 	public List<Juego> listNintendo();
+
+	public List<Juego> listSigloXX();
 
 }
