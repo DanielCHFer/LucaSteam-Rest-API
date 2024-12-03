@@ -1,11 +1,13 @@
 package com.ejemplos.spring.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,6 +101,18 @@ public class JuegosController {
 	{
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
+	
+	//hacemos un update y en caso de que no se pueda devolvemos un mensaje personalizado
+	@PutMapping("/modicar")
+	public ResponseEntity<Juego> updateJuego1(@RequestBody Juego juego)
+	{
+		Optional<Juego> result = this.serv.updateJuego(juego);
+		if (result.isEmpty()) {
+			// No encontrado
+			throw new NoSuchElementException("El juego con el ID proporcionado no existe");
+		}
+		return ResponseEntity.of(result);
+	}
 
 	@DeleteMapping("/juegos/{id}")
 	public Optional<Juego> deleteJuego(@PathVariable int id) {
@@ -112,5 +126,4 @@ public class JuegosController {
 	    }
 	    
 	}
-	
 }

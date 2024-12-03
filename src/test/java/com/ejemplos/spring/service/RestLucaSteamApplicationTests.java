@@ -1,4 +1,4 @@
-package com.ejemplos.spring;
+package com.ejemplos.spring.service;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -93,22 +93,19 @@ class RestLucaSteamApplicationTests {
     
     
     @Test
-    void testJuegoExistsException() throws Exception {
+    void testJuegoUpdateException() throws Exception {
         // Dado un juego repetido se debería lanzar la excepción JuegoExistsException
-        Juego juego = new Juego();
-        juego.setIdjuego(1);
-        juego.setNombre("JuegoExistente");
+    	Juego juego = new Juego("Juego1", "Wii", 2000, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
         String json = objectMapper.writeValueAsString(juego);
 
         // Simula que el servicio lanza la excepción JuegoExistsException
-       // when(juegoService.findByNombre("JuegoExistente")).thenThrow(JuegoExistsException.class);
+       when(juegoService.findByNombre("Juego1")).thenThrow(JuegoExistsException.class);
 
-        // Realiza la solicitud POST y verifica la respuesta
-        mockMvc.perform(put("/juegos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-        		.andExpect(status().isNotFound());
-        		
+       mockMvc.perform(post("/juegos")
+    	        .contentType(MediaType.APPLICATION_JSON)
+    	        .content(objectMapper.writeValueAsString(juego)))
+    	        .andExpect(status().isOk())
+    	        .andExpect(content().string("El juego ya existe"));
     }
     
 }
