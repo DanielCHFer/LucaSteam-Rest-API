@@ -61,7 +61,6 @@ public class JuegosServiceImpl implements JuegosService{
 						Double.parseDouble(datosCSV[9]),Double.parseDouble(datosCSV[10]));	
 				
 				juegosCSV.add(j);
-				System.out.println(j);
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -138,6 +137,7 @@ public class JuegosServiceImpl implements JuegosService{
 		return j;
 	}
 
+
 	@Override
 	public Optional<Juego> deleteJuego(int id) {
 		Optional<Juego> j = juegosDao.findById(id);
@@ -151,5 +151,14 @@ public class JuegosServiceImpl implements JuegosService{
 	public List<Juego> listSigloXX() {
 		return juegosDao.listSigloXX();
 	}
+
+	@Override
+	public List<Juego> listNintendo() {
+		
+		return juegosDao.listNintendo();
+	}
+
+	
+	
 
 }

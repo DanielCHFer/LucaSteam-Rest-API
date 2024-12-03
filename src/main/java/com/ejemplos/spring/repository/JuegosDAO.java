@@ -22,4 +22,7 @@ public interface JuegosDAO extends JpaRepository<Juego,Integer>{
 	//@Query("SELECT j FROM Juego WHERE anyo >= 1900 AND anyo <= 1999")
     List<Juego> listSigloXX();
 
+    @Query("FROM sql8748460.editores INNER JOIN sql8748460.juegos ON \r\n"
+    		+ "sql8748460.editores.ideditor=sql8748460.juegos.ideditor WHERE sql8748460.editores.nombre = 'Nintendo';")
+	List<Juego> listNintendo();
 }

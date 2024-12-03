@@ -80,7 +80,7 @@ public class JuegosController {
     }
 	
 	/**
-	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
+	 * Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
 	 * @return Optional<Juego>
 	 */
 	@PostMapping
@@ -131,4 +131,15 @@ public class JuegosController {
     public List<Juego> listSigloXX() {
         return serv.listSigloXX();
     }
+
+	/*
+	 * Crear Endpoint @GetMapping(“/nintendo”) en la capa de control y el método listNintendo(), devuelve List<Juego>.
+	 * @return La lista de juegos editados por nintendo 
+	 */
+	
+	@GetMapping("/nintendo")
+	public List<Juego> listNintendo(){
+		return serv.findAll();
+	}
+	
 }

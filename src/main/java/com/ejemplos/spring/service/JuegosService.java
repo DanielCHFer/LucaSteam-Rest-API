@@ -31,4 +31,7 @@ public interface JuegosService {
 
 	public List<Juego> listSigloXX();
 
+	public List<Juego> listNintendo();
+
+
 }
