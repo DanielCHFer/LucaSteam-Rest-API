@@ -2,16 +2,15 @@ package com.ejemplos.spring.service;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.ejemplos.spring.controller.JuegosController;
-import com.ejemplos.spring.controller.error.JuegoExistsException;
 import com.ejemplos.spring.model.Editor;
 import com.ejemplos.spring.model.Juego;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,14 +60,11 @@ class RestLucaSteamApplicationTests {
 
 	@Test
 	public void testObtenerJuegos() throws Exception {
-		// Crear juegos con distintos años
-		Juego juego1 = new Juego("Juego1", "Wii", 2000, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
 		Juego juego2 = new Juego("Juego2", "Wii", 1999, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
 		Juego juego3 = new Juego("Juego3", "Wii", 1999, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
 		Juego juego4 = new Juego("Juego4", "Wii", 1999, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
 
-		// Crear lista de todos los juegos
-		List<Juego> juegosTotales = Arrays.asList(juego1, juego2, juego3, juego4);
+		
 
 		// Simular que el servicio devuelve una lista de juegos del año 1999
 		when(juegoService.findByAnyo(1999)).thenReturn(Arrays.asList(juego2, juego3, juego4));
@@ -92,14 +88,14 @@ class RestLucaSteamApplicationTests {
 	void testJuegoUpdateException() throws Exception {
 		// Dado un juego repetido se debería lanzar la excepción JuegoExistsException
 		Juego juego = new Juego("Juego1", "Wii", 2000, "Plataformas", new Editor("Nintendo"), 100, 100, 100, 100, 100);
-		String json = objectMapper.writeValueAsString(juego);
+		Optional<Juego> juegoOptional = null;
 
 		// Simula que el servicio lanza la excepción JuegoExistsException
-		when(juegoService.findByNombre("Juego1")).thenThrow(JuegoExistsException.class);
+		when(juegoService.updateJuego(juego)).thenReturn(juegoOptional);
 
 		mockMvc.perform(
-				post("/juegos").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(juego)))
-				.andExpect(status().isOk()).andExpect(content().string("El juego ya existe"));
+				put("/juegos").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(juego)))
+				.andExpect(status().isNotFound());
 	}
 
 }

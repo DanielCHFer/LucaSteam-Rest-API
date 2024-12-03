@@ -64,6 +64,8 @@ public class JuegosServiceImpl implements JuegosService {
 				System.out.println(j);
 			}
 
+			reader.close();
+			
 		} catch (FileNotFoundException e) {
 			// logger.error("Fichero CSV no encontrado");
 			e.printStackTrace();

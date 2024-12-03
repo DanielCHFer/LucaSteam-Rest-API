@@ -20,7 +20,6 @@ public class CustomDefaultError extends DefaultErrorAttributes {
 		Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
 		// quitamos la traza
 		errorAttributes.remove("trace");
-		errorAttributes.put("hola", "pringao");
 
 		return errorAttributes;
 
