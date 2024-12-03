@@ -138,6 +138,18 @@ public class JuegosServiceImpl implements JuegosService{
 		return j;
 	}
 
-	
-	
+	@Override
+	public Optional<Juego> deleteJuego(int id) {
+		Optional<Juego> j = juegosDao.findById(id);
+        if (j.isPresent()) {
+        	juegosDao.deleteById(id);
+        }
+        return j;
+	}
+
+	@Override
+	public List<Juego> listSigloXX() {
+		return juegosDao.listSigloXX();
+	}
+
 }

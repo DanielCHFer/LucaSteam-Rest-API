@@ -26,6 +26,8 @@ import com.ejemplos.spring.service.JuegosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/juegos")
@@ -113,4 +115,20 @@ public class JuegosController {
 	    
 	}
 	
+	/**
+	 * Listar los juegos del siglo XX.
+	 *
+	 * @return Una lista de juegos con los juegos creados durante el siglo XX.
+	 */
+	@Operation(summary = "Obtener lista de juegos del siglo XX", 
+            description = "Este endpoint devuelve una lista de todos los juegos cuya fecha esté entre 1900 y 1999.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Lista de juegos obtenida exitosamente"),
+			@ApiResponse(responseCode = "204", description = "No se encontraron juegos en el rango de fechas"),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor")}
+	)
+	@GetMapping("/sigloveinte")
+    public List<Juego> listSigloXX() {
+        return serv.listSigloXX();
+    }
 }

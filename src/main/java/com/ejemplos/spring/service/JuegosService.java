@@ -26,5 +26,9 @@ public interface JuegosService {
 	public Optional<Juego> findById(int id);
 
 	public Juego deleteJuego(Juego j);
+	
+	public Optional<Juego> deleteJuego(int id);
+
+	public List<Juego> listSigloXX();
 
 }
