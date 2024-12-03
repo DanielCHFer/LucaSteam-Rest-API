@@ -1,13 +1,10 @@
 package com.ejemplos.spring.controller;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.ejemplos.spring.controller.error.JuegoNotFoundException;
 import com.ejemplos.spring.controller.error.JuegoFormatException;
 import com.ejemplos.spring.model.Juego;
@@ -28,6 +23,8 @@ import com.ejemplos.spring.service.JuegosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/juegos")
@@ -66,23 +63,41 @@ public class JuegosController {
     }
 	
 	/**
-	 * Cargar juegos desde un archivo CSV.
-	 *
-	 * @return Una lista de juegos con los datos del csv para agregarlos a la base de datos.
-	 */
-	@Operation(
-		summary = "Listar juegos segun anyo de salida",
-		description = "Devuelve un listado de los juegos almacenados filtrando por el anyo de salida especificado."
-	)
+     * Listar juegos según el año de salida.
+     *
+     * @param anyo El año para filtrar los juegos.
+     * @return Una lista de los juegos filtrados por el año especificado.
+     */
+    @Operation(
+        summary = "Listar juegos por año",
+        description = "Devuelve un listado de los juegos almacenados filtrados por el año de salida especificado."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de juegos obtenida exitosamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron juegos para el año especificado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
 	@GetMapping("/anyo/{anyo}")
     public List<Juego> listJuegosByAnyo(@PathVariable int anyo) {
         return serv.findByAnyo(anyo);
     }
 	
 	/**
-	 * Adrian: Crear Endpoint @PostMapping("/juegos") saveJuego(Juego juego) en la capa de Control.
-	 * @return Optional<Juego>
-	 */
+     * Crear un nuevo juego.
+     *
+     * @param Juego El objeto Juego que se desea guardar.
+     * @param bindingResult Contiene los errores de validación, si existen.
+     * @return El juego recién guardado.
+     */
+    @Operation(
+        summary = "Crear un juego",
+        description = "Crea un nuevo juego y lo guarda en la base de datos."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Juego creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+        @ApiResponse(responseCode = "500", description = "Error al crear el juego")
+    })
 	@PostMapping
 	public Juego saveJuego(@Valid @RequestBody Juego juego, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
@@ -95,25 +110,42 @@ public class JuegosController {
 		return serv.saveJuego(juego);
 	}
 	
-	//se hace un update, se llama al server y nos devuelver unos valores y en caso de que no haya valor devuelto lanza una excepcion.
+	/**
+     * Actualizar un juego existente.
+     *
+     * @param Juego El juego con los nuevos datos.
+     * @return El juego actualizado.
+     */
+    @Operation(
+        summary = "Actualizar un juego",
+        description = "Actualiza los datos de un juego existente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Juego actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "El juego no se encontró"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
 	@PutMapping
 	public Juego updateJuego(@RequestBody Juego juego)
 	{
 		return serv.updateJuego(juego).orElseThrow(JuegoNotFoundException::new); 
 	}
-	
-	//hacemos un update y en caso de que no se pueda devolvemos un mensaje personalizado
-	@PutMapping("/modicar")
-	public ResponseEntity<Juego> updateJuego1(@RequestBody Juego juego)
-	{
-		Optional<Juego> result = this.serv.updateJuego(juego);
-		if (result.isEmpty()) {
-			// No encontrado
-			throw new NoSuchElementException("El juego con el ID proporcionado no existe");
-		}
-		return ResponseEntity.of(result);
-	}
 
+	/**
+     * Eliminar un juego.
+     *
+     * @param id El ID del juego que se desea eliminar.
+     * @return El juego eliminado.
+     */
+    @Operation(
+        summary = "Eliminar un juego",
+        description = "Elimina un juego por su ID y devuelve el juego eliminado."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Juego eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró el juego para eliminar"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
 	@DeleteMapping("/juegos/{id}")
 	public Optional<Juego> deleteJuego(@PathVariable int id) {
 	    Optional<Juego> juego = serv.findById(id);
@@ -126,4 +158,21 @@ public class JuegosController {
 	    }
 	    
 	}
+	
+	/**
+	 * Listar los juegos del siglo XX.
+	 *
+	 * @return Una lista de juegos con los juegos creados durante el siglo XX.
+	 */
+	@Operation(summary = "Obtener lista de juegos del siglo XX", 
+            description = "Este endpoint devuelve una lista de todos los juegos cuya fecha esté entre 1900 y 1999.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Lista de juegos obtenida exitosamente"),
+			@ApiResponse(responseCode = "204", description = "No se encontraron juegos en el rango de fechas"),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor")}
+	)
+	@GetMapping("/sigloveinte")
+    public List<Juego> listSigloXX() {
+        return serv.listSigloXX();
+    }
 }

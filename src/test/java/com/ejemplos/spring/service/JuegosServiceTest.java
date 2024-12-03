@@ -26,11 +26,6 @@ public class JuegosServiceTest {
 
     @MockBean
     private JuegosService juegoService;
-	
-	@Test
-	void testDeleteJuegoDevuelveJuego() throws Exception {
-		//test
-	}
 
 
 }
