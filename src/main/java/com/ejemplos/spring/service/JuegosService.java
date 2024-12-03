@@ -27,4 +27,6 @@ public interface JuegosService {
 
 	public Juego deleteJuego(Juego j);
 
+	public List<Juego> listSigloXX();
+
 }
